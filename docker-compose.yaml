@@ -6,8 +6,8 @@ services:
     container_name: my-nginx
     network_mode: host
     ports:
-      - "80:80"
-      - "443:443"
+      - "${DESTINATION_HTTP_PORT_FOR}:80"
+      - "${DESTINATION_HTTPS_PORT_FOR}:443"
     volumes:
       - ./nginx.conf.template:/etc/nginx/nginx.conf.template
       - ./startup.sh:/docker-entrypoint.d/startup.sh
