@@ -1,9 +1,8 @@
-version: '3'
-
 services:
   nginx:
     image: nginx:latest
     container_name: my-nginx
+    restart: always
     network_mode: host
     ports:
       - "80:80"
@@ -11,7 +10,9 @@ services:
     volumes:
       - ./nginx.conf.template:/etc/nginx/nginx.conf.template
       - ./startup.sh:/docker-entrypoint.d/startup.sh
-    restart: always
+      - ${HTTPS_CERT_PATH}:/certs/cert.crt
+      - ${HTTPS_KEY_PATH}:/certs/cert.key
     environment:
       - DESTINATION_HTTP_PORT=${DESTINATION_HTTP_PORT}
-
+      - DESTINATION_HTTPS_PORT=${DESTINATION_HTTPS_PORT}
+      - HTTPS_DOMAIN=${HTTPS_DOMAIN}

@@ -4,9 +4,22 @@ events {}
 http {
     server {
         listen 80;
+        server_name ${HTTPS_DOMAIN};
 
         location / {
-            proxy_pass http://localhost:$DESTINATION_HTTP_PORT;
+            return 301 https://$host$request_uri;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name ${HTTPS_DOMAIN};
+
+        ssl_certificate /certs/cert.crt;
+        ssl_certificate_key /certs/cert.key;
+
+        location / {
+            proxy_pass http://localhost:${DESTINATION_HTTP_PORT};
             proxy_set_header Host $host;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
